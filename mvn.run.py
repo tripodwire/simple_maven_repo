@@ -232,7 +232,7 @@ class HTTPMavenRequestHandler(SimpleHTTPRequestHandler):
 
 class HTTPMavenServer(HTTPServer):
     def __init__(self, server_address, repository, repository_name=None, jar_location=None, secure_put=None,
-                 auths=None, certificate=None):
+                 auths=None, certificate=None, private_key=None):
         HTTPMavenRequestHandler.protocol_version = "HTTP/1.0"
         HTTPMavenRequestHandler.add_and_optimize(jar_location)
         if secure_put is not None:
@@ -254,7 +254,12 @@ class HTTPMavenServer(HTTPServer):
         HTTPServer.__init__(self, server_address, HTTPMavenRequestHandler, True)
         self.certificate = certificate
         if self.use_ssl:
-            self.socket = ssl.wrap_socket(self.socket, server_side=True, certfile=self.certificate)
+            self.socket = ssl.wrap_socket(self.socket,
+                                          server_side=True,
+                                          certfile=self.certificate,
+                                          keyfile=private_key,
+                                          ssl_version=ssl.PROTOCOL_TLSv1_2
+                                          )
 
     def params(self):
         params = HTTPMavenRequestHandler.params()
@@ -281,10 +286,12 @@ default_ip = ''
 @click.option('--config', help='JSON Config file: all arguments can also be specified in config file',
               type=click.Path(exists=True))
 @click.option('--secure-put', help='Authorize all PUT modification requests', is_flag=True)
-@click.option('--cert', help='Location of ssl certificate to use if HTTPS is desired', type=click.Path(exists=True))
+@click.option('--cert-file', help='Location of ssl certificate to use if HTTPS is desired',
+              type=click.Path(exists=True))
+@click.option('--key-file', help='Location of private key to use if HTTPS is desired', type=click.Path(exists=True))
 @click.option('--auths', multiple=True,
               help='Optional, base 64 encoded basic header authorizations. It can be specified multiple times')
-def main(repo, reponame, jar, port, ip, config, secure_put, cert, auths):
+def main(repo, reponame, jar, port, ip, config, secure_put, cert_file, key_file, auths):
     """
         Run a simple HTTP maven repo
     :param repo:
@@ -326,7 +333,8 @@ def main(repo, reponame, jar, port, ip, config, secure_put, cert, auths):
                             jar_location=args.get('jar', jar),
                             secure_put=args.get('secure_put', secure_put),
                             auths=args.get('auths', auths),
-                            certificate=args.get('cert', cert))
+                            certificate=args.get('cert_file', cert_file),
+                            private_key=args.get('key_file', key_file))
 
     # do cleanup
     def shutdown():
