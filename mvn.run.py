@@ -284,7 +284,8 @@ default_ip = ''
 
 
 @click.command(help='Runs a simple maven repo ...',
-               context_settings=dict(help_option_names=['-h', '--help']))
+               context_settings=dict(help_option_names=['-h', '--help'],
+                                     allow_extra_args=True))
 @click.option('--repo', help='The maven repository base path')
 @click.option('--reponame', help='Repository name if it is different than the repo directory name')
 @click.option('--jar', help='Location of the maven indexer jar')
