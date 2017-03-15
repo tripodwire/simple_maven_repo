@@ -1,17 +1,4 @@
 
-<style>
-pre, xmp, plaintext, listing {
-    white-space: pre;
-}
-.markdown-body pre > code {
-    white-space: pre;
-}
-.markdown-body code {
-    white-space: nowrap;
-}
-</style>
-
-
 # Simple Maven Repository
 
 A simple maven HTTP repository server implementation written in python.
