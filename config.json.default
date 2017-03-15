@@ -1,0 +1,11 @@
+{
+  "port": 4443,
+  "secure_put": true,
+  "repo": "/path/to/repo",
+  "jar": "./indexer-cli-5.1.1.jar",
+  "cert": "/path/to/ssl/cert.pem",
+  "auths": ["base64challenge"],
+  "clear_auths": {
+    "username": "password"
+  }
+}

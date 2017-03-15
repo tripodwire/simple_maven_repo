@@ -278,7 +278,7 @@ default_ip = ''
 @click.option('--jar', help='Location of the maven indexer jar')
 @click.option('--port', help='The http port to bind to, defaults to %s' % default_port, type=int)
 @click.option('--ip', help='The ip address to bind to, inherits the underlying socket address if not set')
-@click.option('--config', help='Config file: all arguments can also be specified in config file',
+@click.option('--config', help='JSON Config file: all arguments can also be specified in config file',
               type=click.Path(exists=True))
 @click.option('--secure-put', help='Authorize all PUT modification requests', is_flag=True)
 @click.option('--cert', help='Location of ssl certificate to use if HTTPS is desired', type=click.Path(exists=True))
