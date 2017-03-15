@@ -273,7 +273,7 @@ default_ip = ''
 
 @click.command(help='Runs a simple maven repo ...',
                context_settings=dict(help_option_names=['-h', '--help']))
-@click.option('--repo', help='The maven repository base path', required=True)
+@click.option('--repo', help='The maven repository base path')
 @click.option('--reponame', help='Repository name if it is different than the repo directory name')
 @click.option('--jar', help='Location of the maven indexer jar')
 @click.option('--port', help='The http port to bind to, defaults to %s' % default_port, type=int)
