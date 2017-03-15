@@ -286,7 +286,7 @@ default_ip = ''
               help='Optional, base 64 encoded basic header authorizations. It can be specified multiple times')
 def main(repo, reponame, jar, port, ip, config, secure_put, cert, auths):
     """
-    Run a simple HTTP maven repo
+        Run a simple HTTP maven repo
     :param repo:
     :param reponame:
     :param jar:
