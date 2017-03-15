@@ -1,3 +1,9 @@
+# Project Custom BEGIN
+config.json
+.DS_Store
+
+# Project Custom END
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
