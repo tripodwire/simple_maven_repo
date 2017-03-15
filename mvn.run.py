@@ -38,6 +38,10 @@ class HTTPMavenRequestHandler(SimpleHTTPRequestHandler):
     basic_authorizations = []
 
     @classmethod
+    def repository_index(cls):
+        return os.path.join(cls.repository, ".index")
+
+    @classmethod
     def add_auth(cls, auth):
         cls.basic_authorizations.append(auth)
 
@@ -165,7 +169,7 @@ class HTTPMavenRequestHandler(SimpleHTTPRequestHandler):
         try:
             dirname = os.path.dirname(path)
             if dirname and not os.path.exists(dirname):
-                os.makedirs(dirname)
+                os.makedirs(dirname, 0777, True)
             return open(path, 'wb+')
         except Exception as e:
             print "Error: %s : %s" % (e.message, type(e).__name__)
@@ -184,7 +188,7 @@ class HTTPMavenRequestHandler(SimpleHTTPRequestHandler):
         try:
             max_count = 10000
             time.sleep(10)
-            destination = os.path.join(cls.repository, ".index")
+            destination = cls.repository_index()
             msg = "\r\nIndexing mvn repo ( %s ) -> ( %s )" % (cls.repository, destination)
             sys.stderr.write(msg)
             p = subprocess.Popen(["java",
@@ -214,7 +218,10 @@ class HTTPMavenRequestHandler(SimpleHTTPRequestHandler):
 
     @classmethod
     def ensure_index(cls):
-        index_path = os.path.join(cls.repository, ".index", "nexus-maven-repository-index*")
+        repository_index = cls.repository_index()
+        if not os.path.exists(repository_index):
+            os.makedirs(repository_index, 0777, True)
+        index_path = os.path.join(repository_index, "nexus-maven-repository-index*")
         if not glob.glob(index_path):
             print "Running indexer to create the index"
             cls.run_index_impl()
