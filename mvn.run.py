@@ -169,7 +169,7 @@ class HTTPMavenRequestHandler(SimpleHTTPRequestHandler):
         try:
             dirname = os.path.dirname(path)
             if dirname and not os.path.exists(dirname):
-                os.makedirs(dirname, 0777, True)
+                os.makedirs(dirname)
             return open(path, 'wb+')
         except Exception as e:
             print "Error: %s : %s" % (e.message, type(e).__name__)
@@ -220,7 +220,7 @@ class HTTPMavenRequestHandler(SimpleHTTPRequestHandler):
     def ensure_index(cls):
         repository_index = cls.repository_index()
         if not os.path.exists(repository_index):
-            os.makedirs(repository_index, 0777, True)
+            os.makedirs(repository_index)
         index_path = os.path.join(repository_index, "nexus-maven-repository-index*")
         if not glob.glob(index_path):
             print "Running indexer to create the index"
