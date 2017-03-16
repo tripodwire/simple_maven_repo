@@ -172,7 +172,7 @@ class HTTPMavenRequestHandler(SimpleHTTPRequestHandler):
                 os.makedirs(dirname)
             return open(path, 'wb+')
         except Exception as e:
-            print "Error: %s : %s" % (e.message, type(e).__name__)
+            sys.stderr.write("Error: %s" % e)
 
     @classmethod
     def run_indexer(cls, path):
@@ -223,7 +223,7 @@ class HTTPMavenRequestHandler(SimpleHTTPRequestHandler):
             os.makedirs(repository_index)
         index_path = os.path.join(repository_index, "nexus-maven-repository-index*")
         if not glob.glob(index_path):
-            print "Running indexer to create the index"
+            sys.stderr.write("Running indexer to create the index")
             cls.run_index_impl()
 
     @classmethod
@@ -351,8 +351,8 @@ def main(repo, reponame, jar, port, ip, config, secure_put, cert_file, key_file,
 
     try:
         sa = httpd.socket.getsockname()
-        print "Serving HTTP on", sa[0], "port", sa[1], "..."
-        print httpd.params()
+        sys.stderr.write("Serving HTTP on %s:%s ..." % (sa[0], sa[1]))
+        sys.stderr.write(httpd.params())
         HTTPMavenRequestHandler.ensure_index()
         httpd.serve_forever()
     except KeyboardInterrupt:
